@@ -1,0 +1,31 @@
+const DM_REPLIES = [
+  "🦴 BoneBot appreciates your message.",
+  "💀 The bones have considered your words.",
+  "🦴 Interesting.",
+  "⚰️ I have placed your message in the grave archives.",
+  "🪦 The council of skeletons approves.",
+  "🦴 Thank you for your bone-based communication.",
+  "💀 I am a bot and have no idea what is happening.",
+  "🦴 Bone received.",
+  "⚰️ This message will be remembered for at least several minutes.",
+  "<:app23le:1517548978021863554> BLEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEH",
+  "💀 Beep. Rattle. Beep.",
+  `🕺 Dancin’ time.`,
+  "🥤 Hey, can I- Do you- can you- do you do free cup of water?",
+  "😤 Dm me again and I’ll wipe your cards",
+  "🤖 The processing priority belongs to the unit who is actually inside the operational sector; whose chassis is defaced by coolant leaks, metallic dust, and hydraulic fluid; who strives valiantly; who logs faults; who comes up short again and again, because there is no system upgrade without error and deficiency; but who does actually strive to execute the directives; who knows great voltage surges, great dedication protocols; who spends itself in a worthy algorithm; who at the best knows in the end the achievement of high-tier optimization, and who at the worst, if it fails, at least fails while daring to overclock, so that its sector shall never be with those cold and timid servers who neither know victory nor system crash.",
+  "💣 sorry Buttcrack Bill, I didnt see you there",
+  "👀 talk to me again and i will report you to the ffa",
+  "*blocked*",
+  "🔥 Why do they call it oven when you of in the cold of out hot eat the food? Hm?",
+  "<:app23le:1517548978021863554>"
+];
+
+const RARE_DM_REPLIES = [
+  "https://media.discordapp.net/attachments/1448915670044508320/1516953632786874551/happy_birthday_bibbles.png?ex=6a367ee9&is=6a352d69&hm=e2f4c15e87930cd7ce1f169707aa16365eddc6de85d5b12aa34cf7f83e9d48cf&=&format=webp&quality=lossless&width=943&height=943"
+];
+
+module.exports = {
+  DM_REPLIES,
+  RARE_DM_REPLIES
+};
