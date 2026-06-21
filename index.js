@@ -11,7 +11,7 @@ let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
 const BOT_VERSION = "2.0";
-const IMAGE_COMMIT = "547c7e8"; // replace with newest git log --oneline
+const IMAGE_COMMIT = "96abb45"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
   '1470496897721565419'
