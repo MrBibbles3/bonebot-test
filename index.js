@@ -82,10 +82,10 @@ client.once('clientReady', async () => {
     await shopChannel.send(`Update ${BOT_VERSION} is live!`);
 
 
-    // Rotate every 60 minutes
+    // Rotate every 60 minutes (30 for testing)
     setInterval(async () => {
       await postShop(shopChannel);
-    }, 60 * 60 * 1000);
+    }, 30 * 60 * 1000);
 
   } catch (err) {
     console.error("Shop boot error:", err);
@@ -1161,9 +1161,6 @@ function generateShop() {
   }
 
   addRandomUniqueCard(shop, fifthShop);
-  addRandomUniqueCard(shop, 'APEX');
-  addRandomUniqueCard(shop, 'APEX');
-  addRandomUniqueCard(shop, 'APEX');
   addRandomUniqueCard(shop, 'APEX');
   addRandomUniqueCard(shop, 'APEX');
 
