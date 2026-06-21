@@ -290,8 +290,8 @@ function getCardId(card) {
   return Number(card.season) === 1 ? card.id : `${card.season}${card.id}`;
 }
 
-function getCardImage(card) {
-  return `https://cdn.jsdelivr.net/gh/MrBibbles3/bonebot@${IMAGE_COMMIT}/images/S${card.season}/${card.id}.png?v=${BOT_VERSION}`;
+function getCardImageUrl(card) {
+  return `https://cdn.jsdelivr.net/gh/MrBibbles3/bonebot-test@${IMAGE_COMMIT}/images/S${card.season}/${getCardImageFileName(card)}?v=${BOT_VERSION}`;
 }
 
 function findCardById(cardId) {
