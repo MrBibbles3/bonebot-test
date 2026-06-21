@@ -11,7 +11,7 @@ let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
 const BOT_VERSION = "2.0";
-const IMAGE_COMMIT = "45f79f4"; // replace with newest git log --oneline
+const IMAGE_COMMIT = "547c7e8"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
   '1470496897721565419'
@@ -19,7 +19,7 @@ const ALLOWED_CHANNELS = [
 const CLIENT_ID = process.env.CLIENT_ID;
 const GUILD_ID = process.env.GUILD_ID;
 const SHOP_CHANNEL_ID = process.env.SHOP_CHANNEL_ID;
-const OFFLINE_IMAGES = true;
+const OFFLINE_IMAGES = false;
 const {DM_REPLIES,RARE_DM_REPLIES} = require("./replies/dmReplies");
 const fs = require("fs");
 const path = require("path");
