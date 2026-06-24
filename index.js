@@ -229,14 +229,14 @@ function buildPingsMessage(user, viewerId) {
         if (isCardGif(card)) {
           embed.setImage(`attachment://${fileName}`);
         } else {
-          embed.setThumbnail(`attachment://${fileName}`);
+          embed.setImage(`attachment://${fileName}`);
         }
         files.push(attachment);
       } else {
         if (isCardGif(card)) {
           embed.setImage(getCardImageUrl(card));
         } else {
-          embed.setThumbnail(getCardImageUrl(card));
+          embed.setImage(getCardImageUrl(card));
         }
       }
     }
@@ -1022,14 +1022,14 @@ async function postShop(channel) {
       if (isCardGif(card)) {
         cardEmbed.setImage(`attachment://${fileName}`);
       } else {
-        cardEmbed.setThumbnail(`attachment://${fileName}`);
+        cardEmbed.setImage(`attachment://${fileName}`);
       }
       files.push(attachment);
     } else {
       if (isCardGif(card)) {
         cardEmbed.setImage(getCardImageUrl(card));
       } else {
-        cardEmbed.setThumbnail(getCardImageUrl(card));
+        cardEmbed.setImage(getCardImageUrl(card));
       }
     }
 
@@ -3124,7 +3124,7 @@ client.on('interactionCreate', async interaction => {
         if (isCardGif(card)) {
           purchaseEmbed.setImage(`attachment://${fileName}`);
         } else {
-          purchaseEmbed.setThumbnail(`attachment://${fileName}`);
+          purchaseEmbed.setImage(`attachment://${fileName}`);
         }
 
         files.push(attachment);
@@ -3134,7 +3134,7 @@ client.on('interactionCreate', async interaction => {
         if (isCardGif(card)) {
           purchaseEmbed.setImage(getCardImageUrl(card));
         } else {
-          purchaseEmbed.setThumbnail(getCardImageUrl(card));
+          purchaseEmbed.setImage(getCardImageUrl(card));
         }
 
       }
