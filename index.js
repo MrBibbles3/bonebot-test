@@ -2688,17 +2688,17 @@ client.on('interactionCreate', async interaction => {
           `${spent >= 50000 ? "✅" : "❌"} **Kev**\n` +
           `Spend bones: **${spent.toLocaleString()}/50,000**\n\n` +
 
+          `${s2.complete ? "✅" : "❌"} **Appl**\n` +
+          `Complete Season 2 Index: **${s2.ownedCount}/${s2.totalCount}**\n\n` +
+
+          `${coinFlip >= 10 ? "✅" : "❌"} **Game**\n` +
+          `Perfect Coin Flips: **${coinFlip}/10**\n\n` +
+
           `${blackjack >= 10 ? "✅" : "❌"} **Sinny**\n` +
           `Blackjack 21s: **${blackjack}/10**\n\n` +
 
           `${boneDig >= 10 ? "✅" : "❌"} **Fire**\n` +
           `Bone Dig clears: **${boneDig}/10**\n\n` +
-
-          `${coinFlip >= 10 ? "✅" : "❌"} **Game**\n` +
-          `Perfect Coin Flips: **${coinFlip}/10**\n\n` +
-
-          `${s2.complete ? "✅" : "❌"} **Appl**\n` +
-          `Complete Season 2 Index: **${s2.ownedCount}/${s2.totalCount}**\n\n` +
 
           `${devDone ? "✅" : "❌"} **Dev**\n` +
           `Reach High/Low streak 20: **${devDone ? "Complete" : "Incomplete"}**`
