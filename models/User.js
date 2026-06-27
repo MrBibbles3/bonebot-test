@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
     lastGlobalTokenDaily: {
         type: String,
         default: null
-    }
+    },
 
     lastBibblesTokenRecharge: {
         type: Date,
