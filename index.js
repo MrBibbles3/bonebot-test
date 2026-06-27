@@ -143,6 +143,16 @@ const commands = [
   ),
 
   new SlashCommandBuilder()
+  .setName("achievements")
+  .setDescription("View Unique card achievement progress")
+  .addUserOption(option =>
+    option
+      .setName("user")
+      .setDescription("User to view")
+      .setRequired(false)
+  ),
+
+  new SlashCommandBuilder()
   .setName("games")
   .setDescription("Play Bones Games using tokens!"),
 
@@ -680,7 +690,7 @@ async function showGamesMenu(interaction, user, useUpdate = false) {
         inline: true
       },
       {
-        name: "⛏️ Bone Dig",
+        name: "⛏️ Bone Dig (2 TOKENS)",
         value: "Dig, cash out, or perish.",
         inline: true
       }
@@ -2647,12 +2657,58 @@ client.on('interactionCreate', async interaction => {
         });
 
       return interaction.reply({
-        embeds: [embed],
-        flags: 64
+        embeds: [embed]
       });
     }
 
 
+    if (interaction.commandName === "achievements") {
+      const targetUser = interaction.options.getUser("user") || interaction.user;
+      const user = await getOrCreateUser(targetUser.id);
+
+      const s1 = getSeasonIndexData(user, 1);
+      const s2 = getSeasonIndexData(user, 2);
+
+      const spent = Math.min(user.bonesSpentTotal || 0, 50000);
+      const blackjack = Math.min(user.blackjack21Count || 0, 10);
+      const boneDig = Math.min(user.boneDigPerfectCount || 0, 10);
+      const coinFlip = Math.min(user.coinFlipPerfectCount || 0, 10);
+
+      const devDone = !!user.highLowReached20;
+
+      const embed = new EmbedBuilder()
+        .setTitle(`🏆 ${targetUser.username}'s Achievements`)
+        .setColor(0xEFBF04)
+        .setDescription(
+          `👑 **Unique Card Progress**\n\n` +
+
+          `${s1.complete ? "✅" : "❌"} **Bibbles**\n` +
+          `Complete Season 1 Index: **${s1.ownedCount}/${s1.totalCount}**\n\n` +
+
+          `${spent >= 50000 ? "✅" : "❌"} **Kev**\n` +
+          `Spend bones: **${spent.toLocaleString()}/50,000**\n\n` +
+
+          `${blackjack >= 10 ? "✅" : "❌"} **Sinny**\n` +
+          `Blackjack 21s: **${blackjack}/10**\n\n` +
+
+          `${boneDig >= 10 ? "✅" : "❌"} **Fire**\n` +
+          `Bone Dig clears: **${boneDig}/10**\n\n` +
+
+          `${coinFlip >= 10 ? "✅" : "❌"} **Game**\n` +
+          `Perfect Coin Flips: **${coinFlip}/10**\n\n` +
+
+          `${s2.complete ? "✅" : "❌"} **Appl**\n` +
+          `Complete Season 2 Index: **${s2.ownedCount}/${s2.totalCount}**\n\n` +
+
+          `${devDone ? "✅" : "❌"} **Dev**\n` +
+          `Reach High/Low streak 20: **${devDone ? "Complete" : "Incomplete"}**`
+        );
+
+      return interaction.reply({
+        embeds: [embed],
+        flags: 64
+      });
+    }
 
     if (interaction.commandName === 'daily') {
 
