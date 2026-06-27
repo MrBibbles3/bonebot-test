@@ -30,7 +30,6 @@ const { checkUnlocks } = require("./helpers/unlocks");
 //Game Constants
 const MAX_BIBBLES_TOKENS = 20;
 const DAILY_TOKEN_AMOUNT = 10;
-const BIBBLES_TOKEN_RECHARGE_MS = 5 * 60 * 60 * 1000; //5 hour beans
 const COINFLIP_BETS = [50, 100, 200];
 const GRAVEROBBERY_BETS = [50, 100, 200];
 const {startBlackjack, handleBlackjackButton} = require("./games/blackjackGame");
@@ -125,7 +124,7 @@ async function getOrCreateUser(userId) {
 
     await user.save();
   }
-  
+
   await applyDailyTokenGrant(user);
 
   return user;
@@ -382,64 +381,23 @@ async function applyDailyTokenGrant(user) {
   return user;
 }
 
-async function rechargeBibblesTokens(user) {
-  if (user.bibblesTokens === undefined || user.bibblesTokens === null) {
-    user.bibblesTokens = MAX_BIBBLES_TOKENS;
-  }
-
-  if (!user.lastBibblesTokenRecharge) {
-    user.lastBibblesTokenRecharge = new Date();
-  }
-
-  if (user.bibblesTokens >= MAX_BIBBLES_TOKENS) {
-    user.lastBibblesTokenRecharge = new Date();
-    await user.save();
-    return user;
-  }
-
-  const now = Date.now();
-  const lastRecharge = new Date(user.lastBibblesTokenRecharge).getTime();
-  const elapsed = now - lastRecharge;
-
-  const tokensToAdd = Math.floor(elapsed / BIBBLES_TOKEN_RECHARGE_MS);
-
-  if (tokensToAdd > 0) {
-    user.bibblesTokens = Math.min(MAX_BIBBLES_TOKENS, user.bibblesTokens + tokensToAdd);
-
-    const leftoverMs = elapsed % BIBBLES_TOKEN_RECHARGE_MS;
-    user.lastBibblesTokenRecharge = new Date(now - leftoverMs);
-
-    await user.save();
-  }
-
-  return user;
-}
-
-function getNextTokenText(user) {
-  if (user.bibblesTokens >= MAX_BIBBLES_TOKENS) {
-    return "Full!";
-  }
-
-  const now = Date.now();
-  const lastRecharge = new Date(user.lastBibblesTokenRecharge).getTime();
-  const nextRecharge = lastRecharge + BIBBLES_TOKEN_RECHARGE_MS;
-  const remaining = Math.max(0, nextRecharge - now);
-
-  const hours = Math.floor(remaining / (60 * 60 * 1000));
-  const minutes = Math.ceil((remaining % (60 * 60 * 1000)) / (60 * 1000));
-
-  if (hours <= 0) return `${minutes}m`;
-  return `${hours}h ${minutes}m`;
-}
-
 async function spendBibblesToken(user) {
-  await rechargeBibblesTokens(user);
-
   if (user.bibblesTokens <= 0) {
     return false;
   }
 
   user.bibblesTokens -= 1;
+  await user.save();
+
+  return true;
+}
+
+async function spendBibblesToken2(user) {
+  if (user.bibblesTokens <= 1) {
+    return false;
+  }
+
+  user.bibblesTokens -= 2;
   await user.save();
 
   return true;
@@ -691,16 +649,13 @@ async function showBoneDigBetMenu(interaction, user) {
 }
 
 async function showGamesMenu(interaction, user, useUpdate = false) {
-  await rechargeBibblesTokens(user);
-
-  const nextToken = getNextTokenText(user);
 
   const embed = new EmbedBuilder()
     .setTitle("🎮 Bibbles Games")
     .setDescription(
       `Welcome to the BoneBot arcade!\n\n` +
       `<:BToken:1518219006392274995> **Game Tokens:** ${user.bibblesTokens}/${MAX_BIBBLES_TOKENS}\n` +
-      `⏳ **Next Token:** ${nextToken}\n\n` +
+      `⏳ **Next Token:** Gives +10 at "daily" reset time!\n\n` +
       `Choose a game below:`
     )
     .addFields(
@@ -2382,7 +2337,7 @@ client.on('interactionCreate', async interaction => {
         });
       }
 
-      const paid = await spendBibblesToken(user);
+      const paid = await spendBibblesToken2(user);
 
       if (!paid) {
         return interaction.reply({
