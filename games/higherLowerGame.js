@@ -8,6 +8,7 @@ const {
 const User = require("../models/User");
 const { createDeck, drawCard } = require("../games/deck");
 const { makeHandImage } = require("../games/blackjackImages");
+const { checkUnlocks } = require("../helpers/unlocks");
 
 
 const CARD_VALUES = {
@@ -197,7 +198,13 @@ async function handleHigherLowerButton(interaction) {
         user.highlowBestStreak = game.streak;
     }
 
+    if (game.streak >= 20 && !user.highLowReached20) {
+        user.highLowReached20 = true;
+    }
+
     await user.save();
+
+    const unlockEmbeds = await checkUnlocks(user, interaction.user);
 
     const embed = new EmbedBuilder()
         .setTitle("⬆️ Higher or Lower - Cash Out")
@@ -210,8 +217,11 @@ async function handleHigherLowerButton(interaction) {
         )
         .setColor(0xf5c542);
 
+    const embeds = [embed];
+    embeds.push(...unlockEmbeds);
+
     return interaction.update({
-        embeds: [embed],
+        embeds,
         files: [],
         components: [createMainMenuRow(ownerId)]
     });

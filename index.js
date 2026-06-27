@@ -28,7 +28,8 @@ const { checkUnlocks } = require("./helpers/unlocks");
 
 
 //Game Constants
-const MAX_BIBBLES_TOKENS = 10;
+const MAX_BIBBLES_TOKENS = 20;
+const DAILY_TOKEN_AMOUNT = 10;
 const BIBBLES_TOKEN_RECHARGE_MS = 5 * 60 * 60 * 1000; //5 hour beans
 const COINFLIP_BETS = [50, 100, 200];
 const GRAVEROBBERY_BETS = [50, 100, 200];
@@ -124,6 +125,8 @@ async function getOrCreateUser(userId) {
 
     await user.save();
   }
+  
+  await applyDailyTokenGrant(user);
 
   return user;
 }
@@ -360,6 +363,24 @@ function sortInventoryCards(a, b) {
   return aData.number - bData.number;
 }
 
+async function applyDailyTokenGrant(user) {
+  const today = getBrisbaneToday();
+
+  if (user.lastGlobalTokenDaily === today) {
+    return user;
+  }
+
+  user.bibblesTokens = Math.min(
+    MAX_BIBBLES_TOKENS,
+    (user.bibblesTokens || 0) + DAILY_TOKEN_AMOUNT
+  );
+
+  user.lastGlobalTokenDaily = today;
+  user.lastBibblesTokenRecharge = new Date();
+
+  await user.save();
+  return user;
+}
 
 async function rechargeBibblesTokens(user) {
   if (user.bibblesTokens === undefined || user.bibblesTokens === null) {
@@ -443,13 +464,13 @@ async function startCoinFlip(interaction, bet) {
     new ButtonBuilder()
       .setCustomId(`coinflip_heads_${interaction.user.id}_3_0_${bet}`)
       .setLabel("Heads")
-      .setEmoji("💀")
+      .setEmoji("<:BHeads:1519545907920765028>")
       .setStyle(ButtonStyle.Secondary),
 
     new ButtonBuilder()
       .setCustomId(`coinflip_tails_${interaction.user.id}_3_0_${bet}`)
       .setLabel("Tails")
-      .setEmoji("🪦")
+      .setEmoji("<:BTails:1519545923632631879>")
       .setStyle(ButtonStyle.Danger)
   );
 
@@ -916,7 +937,24 @@ function getSeasonIndexData(user, season) {
   };
 }
 
+function getShopSeasonsForToday() {
+  const day = new Date().getDay();
+  // 0 = Sunday
+  // 1 = Monday
+  // 2 = Tuesday
+  // 3 = Wednesday
+  // 4 = Thursday
+  // 5 = Friday
+  // 6 = Saturday
 
+  // Sunday, Monday, Tuesday = Season 2 only
+  if ([0, 1, 2].includes(day)) {
+    return [2];
+  }
+
+  // Wednesday, Thursday, Friday, Saturday = Both Seasons
+  return [1, 2];
+}
 
 //Brisbane Time Function
 function getBrisbaneToday() {
@@ -1189,30 +1227,30 @@ async function postShop(channel) {
 }
 
 
-function addRandomUniqueCard(shop, rarity) {
-  const pool = cards[rarity] || [];
-
-  const available = pool.filter(card =>
+function addRandomUniqueCard(shop, rarity, seasons) {
+  const pool = cards[rarity].filter(card =>
+    seasons.includes(Number(card.season)) &&
     !shop.some(existing => getCardId(existing) === getCardId(card))
   );
 
-  if (available.length === 0) return;
+  if (pool.length === 0) return;
 
-  const chosen = available[Math.floor(Math.random() * available.length)];
-  shop.push(chosen);
+  const randomCard = pool[Math.floor(Math.random() * pool.length)];
+  shop.push(randomCard);
 }
 
 function generateShop() {
   const shop = [];
+  const shopSeasons = getShopSeasonsForToday();
 
-  addRandomUniqueCard(shop, 'COMMON');
+  addRandomUniqueCard(shop, 'COMMON', shopSeasons);
 
   const thirdShop = Math.random() < 0.5 ? 'COMMON' : 'EPIC';
-  addRandomUniqueCard(shop, thirdShop);
+  addRandomUniqueCard(shop, thirdShop, shopSeasons);
 
-  addRandomUniqueCard(shop, 'EPIC');
+  addRandomUniqueCard(shop, 'EPIC', shopSeasons);
 
-  addRandomUniqueCard(shop, 'SECRET');
+  addRandomUniqueCard(shop, 'SECRET', shopSeasons);
 
   const roll = Math.random();
 
@@ -1226,18 +1264,13 @@ function generateShop() {
     fifthShop = 'APEX';
   }
 
-  addRandomUniqueCard(shop, fifthShop);
+  addRandomUniqueCard(shop, fifthShop, shopSeasons);
 
   if (Math.random() < 0.01) {
-    const uniqueCard = findCardById("U7");
-    if (uniqueCard) {
-      shop.push(uniqueCard);
-    }
+    addRandomUniqueCard(shop, 'UNIQUE', shopSeasons);
   }
 
   return shop;
-
-  
 }
 
 
@@ -2480,7 +2513,7 @@ client.on('interactionCreate', async interaction => {
 
         if (wins === 3) {
           user.coinFlipPerfectCount = (user.coinFlipPerfectCount || 0) + 1;
-          gameProgress = Math.min(user.coinFlipPerfectCount, 2);//1111
+          gameProgress = Math.min(user.coinFlipPerfectCount, 10);
         }
 
         await user.save();
@@ -2497,7 +2530,7 @@ client.on('interactionCreate', async interaction => {
 
         if (gameProgress !== null) {
           gameOverText +=
-            `\n\n🪙 **Unique Card Progress:** \`${gameProgress}/10\`${gameProgress === 2 ? " ✅" : ""}`;//1111
+            `\n\n🪙 **Unique Card Progress:** \`${gameProgress}/10\`${gameProgress === 10 ? " ✅" : ""}`;
         }
 
         embed.addFields({

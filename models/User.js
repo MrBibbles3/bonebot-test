@@ -42,6 +42,11 @@ const userSchema = new mongoose.Schema({
         default: 5
     },
 
+    lastGlobalTokenDaily: {
+        type: String,
+        default: null
+    }
+
     lastBibblesTokenRecharge: {
         type: Date,
         default: Date.now
@@ -70,6 +75,11 @@ const userSchema = new mongoose.Schema({
     boneDigPerfectCount: {
         type: Number,
         default: 0
+    },
+
+    highLowReached20: {
+        type: Boolean,
+        default: false
     },
 
     coinFlipPerfectCount: {
