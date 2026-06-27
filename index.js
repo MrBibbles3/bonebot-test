@@ -3106,7 +3106,7 @@ client.on('interactionCreate', async interaction => {
       }
 
       const ownedCards = user.inventory.filter(invItem =>
-        cards[rarity].some(c => getCardId(c) === invItem.itemId)
+        cards[rarity]?.some(c => getCardId(c) === invItem.itemId)
       );
 
       ownedCards.sort(sortInventoryCards);
@@ -3131,7 +3131,7 @@ client.on('interactionCreate', async interaction => {
       }
 
       const cardId = ownedCards[newIndex].itemId;
-      const cardData = cards[rarity].find(c => getCardId(c) === cardId);
+      const cardData = cards[rarity]?.find(c => getCardId(c) === cardId);
 
       if (!cardData) {
         return interaction.reply({
