@@ -3130,6 +3130,7 @@ client.on('interactionCreate', async interaction => {
     // =========================================
     if (interaction.customId.startsWith('buy_')) {
       const parts = interaction.customId.split('_');
+      console.log("BUY HANDLER CLICKED:", interaction.customId);
 
       const cardId = parts[1];
       const quantity = Number(parts[2] || 1);
