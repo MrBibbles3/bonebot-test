@@ -967,7 +967,7 @@ module.exports = {
   ],
   "EVENT": [
     {
-      "season": 1,
+      "season": 3,
       "id" : "X1",
       "name": "MrBibbles",
       "price": 10000,
