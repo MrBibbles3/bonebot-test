@@ -927,7 +927,7 @@ async function notifyPingUsers(shopItems) {
 function getCardsForRarity(rarity) {
   if (rarity === 'SPECIAL') {
     return [
-      ...(cards.FORGOTTEN || []),
+      ...(cards.UNIQUE || []),
       ...(cards.EVENT || [])
     ];
   }
@@ -1161,11 +1161,12 @@ function generateShop() {
   }
 
   addRandomUniqueCard(shop, fifthShop);
-  addRandomUniqueCard(shop, 'APEX');
-  addRandomUniqueCard(shop, 'APEX');
 
-  if (Math.random() < 0.01) {
-    addRandomUniqueCard(shop, 'FORGOTTEN');
+  if (Math.random() < 0.99) {
+    const uniqueCard = findCardById("U7");
+    if (uniqueCard) {
+      shop.push(uniqueCard);
+    }
   }
 
   return shop;
@@ -2358,13 +2359,13 @@ client.on('interactionCreate', async interaction => {
         new ButtonBuilder()
           .setCustomId(`coinflip_heads_${ownerId}_${flipsLeft}_${wins}_${bet}`)
           .setLabel("Heads")
-          .setEmoji("💀")
+          .setEmoji("<:BHeads:1519545907920765028>")
           .setStyle(ButtonStyle.Secondary),
 
         new ButtonBuilder()
           .setCustomId(`coinflip_tails_${ownerId}_${flipsLeft}_${wins}_${bet}`)
           .setLabel("Tails")
-          .setEmoji("🪦")
+          .setEmoji("<:BTails:1519545923632631879>")
           .setStyle(ButtonStyle.Danger)
       );
 
@@ -2410,7 +2411,7 @@ client.on('interactionCreate', async interaction => {
         });
       }
 
-      const blockedRarities = ['APEX', 'FORGOTTEN', 'EVENT'];
+      const blockedRarities = ['APEX', 'UNIQUE', 'EVENT'];
 
       if (blockedRarities.includes(card.rarity.toUpperCase())) {
         return interaction.reply({
@@ -2811,7 +2812,7 @@ client.on('interactionCreate', async interaction => {
         components: []
       });   
       
-      const blockedRarities = ['APEX', 'FORGOTTEN', 'EVENT'];
+      const blockedRarities = ['APEX', 'UNIQUE', 'EVENT'];
 
       if (blockedRarities.includes(card.rarity)) {
         return interaction.reply({
@@ -2844,7 +2845,7 @@ client.on('interactionCreate', async interaction => {
       const user = await User.findOne({ userId: ownerId });
       if (!user) return;
 
-      const rarityOrder = ['COMMON', 'EPIC', 'SECRET', 'NIGHTMARE', 'APEX', 'FORGOTTEN', 'EVENT'];
+      const rarityOrder = ['COMMON', 'EPIC', 'SECRET', 'NIGHTMARE', 'APEX', 'UNIQUE', 'EVENT'];
       const allCards = Object.values(cards).flat();
 
       const sortedInventory = user.inventory
@@ -3185,7 +3186,7 @@ client.on('interactionCreate', async interaction => {
       // LIST VIEW
       if (action === 'list') {
 
-        const rarityOrder = ['COMMON', 'EPIC', 'SECRET', 'NIGHTMARE', 'APEX', 'FORGOTTEN', 'EVENT'];
+        const rarityOrder = ['COMMON', 'EPIC', 'SECRET', 'NIGHTMARE', 'APEX', 'UNIQUE', 'EVENT'];
         const allCards = Object.values(cards).flat();
 
         const sortedInventory = user.inventory
@@ -3282,7 +3283,7 @@ client.on('interactionCreate', async interaction => {
       for (const rarity of rarityKeys) {
         if (action === rarity) {
 
-          const specialRarities = ['FORGOTTEN', 'EVENT'];
+          const specialRarities = ['UNIQUE', 'EVENT'];
 
           const ownedCards = user.inventory.filter(invItem => {
             if (rarity === 'SPECIAL') {

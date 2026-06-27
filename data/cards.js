@@ -450,6 +450,13 @@ module.exports = {
             name: 'Your Opinion',
             price: 500,
             rarity: 'EPIC'
+        },
+        {
+            season: 2,
+            id: 'E11',
+            name: 'True Dedication',
+            price: 500,
+            rarity: 'EPIC'
         }
   ],
   "SECRET": [
@@ -899,14 +906,64 @@ module.exports = {
             rarity: 'APEX'
         }
   ],
-  "FORGOTTEN": [
+  "UNIQUE": [
     {
       "season": 1,
-      "id" : "F1",
-      "name": "MrBibbles",
+      "id" : "U1",
+      "name": "Golden Bibbles",
       "price": 10000,
-      "rarity": "FORGOTTEN"
-    }
+      "rarity": "UNIQUE"
+    },
+        {
+          "season": 2,
+          "id" : "U1",
+          "name": "Biple",
+          "price": 10000,
+          "rarity": "UNIQUE"
+        },
+        {
+          "season": 2,
+          "id" : "U2",
+          "name": "Devbles",
+          "price": 10000,
+          "rarity": "UNIQUE"
+        },
+        {
+          "season": 2,
+          "id" : "U3",
+          "name": "Firebibs",
+          "price": 10000,
+          "rarity": "UNIQUE"
+        },
+        {
+          "season": 2,
+          "id" : "U4",
+          "name": "Gamebibs",
+          "price": 10000,
+          "rarity": "UNIQUE"
+        },
+        {
+          "season": 2,
+          "id" : "U5",
+          "name": "Kevbles",
+          "price": 10000,
+          "rarity": "UNIQUE"
+        },
+        {
+          "season": 2,
+          "id" : "U6",
+          "name": "Sinbles",
+          "price": 10000,
+          "rarity": "UNIQUE"
+        },
+        {
+          "season": 2,
+          "id" : "U7",
+          "name": "Bibki",
+          "price": 10000,
+          "rarity": "UNIQUE"
+        }
+
   ],
   "EVENT": [
     {
