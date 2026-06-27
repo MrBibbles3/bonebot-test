@@ -68,6 +68,9 @@ async function checkUnlocks(user, discordUser = null) {
   const sinnyUnlock = await checkSinnyUnlock(user, discordUser);
   if (sinnyUnlock) unlockEmbeds.push(sinnyUnlock);
 
+  const fireUnlock = await checkFireUnlock(user, discordUser);
+  if (fireUnlock) unlockEmbeds.push(fireUnlock);
+
   return unlockEmbeds;
 }
 
@@ -259,6 +262,46 @@ async function checkApplUnlock(user, discordUser = null) {
   return unlockEmbed;
 }
 
+async function checkFireUnlock(user, discordUser = null) {
+  if ((user.boneDigPerfectCount || 0) < 10) return null;
+
+  const unlocked = await giveUniqueCard(
+    user,
+    UNIQUE_UNLOCKS.fire.cardId,
+    UNIQUE_UNLOCKS.fire.requirement
+  );
+
+  if (!unlocked) return null;
+
+  const card = findCardById(UNIQUE_UNLOCKS.fire.cardId);
+
+  const unlockEmbed = new EmbedBuilder()
+    .setTitle("👑 Unique Card Unlocked! 👑")
+    .setDescription(
+      `You unlocked **${card.name}**!\n\n` +
+      `Requirement: **${UNIQUE_UNLOCKS.fire.requirement}**`
+    )
+    .setColor(0xEFBF04)
+    .setImage(getCardImageUrl(card))
+    .addFields({
+      name: "Card ID",
+      value: `\`${getCardId(card)}\``,
+      inline: true
+    });
+
+  if (discordUser) {
+    try {
+      await discordUser.send({
+        embeds: [unlockEmbed]
+      });
+    } catch (err) {
+      console.log(`Could not DM Fire unlock to ${user.userId}: ${err.message}`);
+    }
+  }
+
+  return unlockEmbed;
+}
+
 
 module.exports = {
   checkUnlocks,
@@ -266,5 +309,6 @@ module.exports = {
   checkBibblesUnlock,
   checkApplUnlock,
   checkSinnyUnlock,
+  checkFireUnlock,
   giveUniqueCard
 };

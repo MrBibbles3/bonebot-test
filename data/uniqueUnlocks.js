@@ -14,7 +14,7 @@ module.exports = {
         requirement: "Reach High/Low streak 20"
     },
 
-    water: {
+    fire: {
         cardId: "2U3",
         requirement: "Clear Bone Dig 10 times"
     },

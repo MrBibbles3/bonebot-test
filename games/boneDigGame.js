@@ -6,6 +6,7 @@ const {
 } = require("discord.js");
 
 const User = require("../models/User");
+const { checkUnlocks } = require("../helpers/unlocks");
 
 const boneDigGames = new Map();
 
@@ -256,8 +257,15 @@ async function handleBoneDigButton(interaction) {
       boneDigGames.delete(ownerId);
 
       const user = await User.findOne({ userId: ownerId });
+
       user.bones += game.winnings;
+
+      user.boneDigPerfectCount = (user.boneDigPerfectCount || 0) + 1;
+      const fireProgress = Math.min(user.boneDigPerfectCount, 10);
+
       await user.save();
+
+      const unlockEmbeds = await checkUnlocks(user, interaction.user);
 
       const embed = new EmbedBuilder()
         .setTitle("⛏️ Bone Dig - Cleared!")
@@ -265,12 +273,16 @@ async function handleBoneDigButton(interaction) {
           `You cleared the whole dig site!\n\n` +
           `${getBoardText(game, true)}\n` +
           `💰 Winnings: **${game.winnings} <:BBones:1518220991938170910>**\n` +
-          `<:BBones:1518220991938170910> New Balance: **${user.bones} <:BBones:1518220991938170910>**`
+          `<:BBones:1518220991938170910> New Balance: **${user.bones} <:BBones:1518220991938170910>**\n\n` +
+          `🔥 **Unique Card Progress:** \`${fireProgress}/10\`${fireProgress === 10 ? " ✅" : ""}`
         )
         .setColor(0x57f287);
 
+      const embeds = [embed];
+      embeds.push(...unlockEmbeds);
+
       return interaction.update({
-        embeds: [embed],
+        embeds,
         components: [createMainMenuRow(ownerId)]
       });
     }

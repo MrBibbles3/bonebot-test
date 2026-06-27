@@ -25,6 +25,14 @@ function createMainMenuRow(userId) {
 
 async function startBlackjack(interaction, bet) {
   const userId = interaction.user.id;
+  bet = Number(bet);
+
+  if (!bet || bet <= 0) {
+    return interaction.reply({
+      content: "💀 Invalid blackjack bet.",
+      flags: 64
+    });
+  }
 
   if (games.has(userId)) {
     games.delete(userId);
@@ -154,18 +162,19 @@ async function handleBlackjackButton(interaction) {
 
     if (dealerValue > 21 || playerValue > dealerValue) {
       if (playerValue === 21) {
+        winnings = game.bet * 3;
 
         user.blackjack21Count = (user.blackjack21Count || 0) + 1;
-        const blackjackProgress = Math.min(user.blackjack21Count, 2);
+        const blackjackProgress = Math.min(user.blackjack21Count, 10);
 
-        if (blackjackProgress === 2) {
+        if (blackjackProgress === 10) {
           result =
             `🎉 **21!** You won **${winnings} <:BBones:1518220991938170910>**!\n\n` +
-            `🃏 **Unique Card Progress:** \`10/2\` ✅`;
+            `🃏 **Unique Card Progress:** \`10/10\` ✅`;
         } else {
           result =
             `🎉 **21!** You won **${winnings} <:BBones:1518220991938170910>**!\n\n` +
-            `🃏 **Unique Card Progress:** \`${blackjackProgress}/2\``;
+            `🃏 **Unique Card Progress:** \`${blackjackProgress}/10\``;
         }
       } else {
         winnings = game.bet * 2;
