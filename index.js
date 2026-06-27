@@ -10,7 +10,7 @@ let currentShopMessages = [];
 let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
-const BOT_VERSION = "2.05";
+const BOT_VERSION = "2.06";
 const IMAGE_COMMIT = "b0cf5bf"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
@@ -148,6 +148,20 @@ const commands = [
   new SlashCommandBuilder()
     .setName('daily')
     .setDescription('Claim your daily <:BBones:1518220991938170910> reward'),
+
+  new SlashCommandBuilder()
+    .setName("index")
+    .setDescription("Check your BoneBot card index")
+    .addIntegerOption(option =>
+      option
+        .setName("season")
+        .setDescription("Season to check")
+        .setRequired(true)
+        .addChoices(
+          { name: "Season 1", value: 1 },
+          { name: "Season 2", value: 2 }
+        )
+    ),
 
   new SlashCommandBuilder()
     .setName("leaderboard")
@@ -986,6 +1000,32 @@ async function checkUnlocks(user, discordUser = null) {
 
   return unlockEmbeds;
 }
+
+function getSeasonIndexData(user, season) {
+  const seasonCards = Object.values(cards)
+    .flat()
+    .filter(card =>
+      Number(card.season) === Number(season) &&
+      card.rarity !== "UNIQUE"
+    )
+    .sort((a, b) => getCardId(a).localeCompare(getCardId(b), undefined, { numeric: true }));
+
+  const ownedCards = seasonCards.filter(card =>
+    user.inventory.some(inv =>
+      inv.itemId === getCardId(card) &&
+      inv.quantity > 0
+    )
+  );
+
+  return {
+    seasonCards,
+    ownedCards,
+    ownedCount: ownedCards.length,
+    totalCount: seasonCards.length,
+    complete: ownedCards.length === seasonCards.length
+  };
+}
+
 
 //Brisbane Time Function
 function getBrisbaneToday() {
@@ -2579,6 +2619,63 @@ client.on('interactionCreate', async interaction => {
     if (interaction.commandName === "games") {
       const user = await getOrCreateUser(interaction.user.id);
       return showGamesMenu(interaction, user);
+    }
+
+    if (interaction.commandName === "index") {
+      const season = interaction.options.getInteger("season");
+
+      const user = await getOrCreateUser(interaction.user.id);
+
+      const {
+        seasonCards,
+        ownedCount,
+        totalCount,
+        complete
+      } = getSeasonIndexData(user, season);
+
+      const missingCards = seasonCards.filter(card =>
+        !user.inventory.some(inv =>
+          inv.itemId === getCardId(card) &&
+          inv.quantity > 0
+        )
+      );
+
+      const percent = totalCount === 0
+        ? 0
+        : Math.floor((ownedCount / totalCount) * 100);
+
+      const missingText = missingCards.length === 0
+        ? "None! Index complete."
+        : missingCards
+            .slice(0, 20)
+            .map(card => `❌ \`${getCardId(card)}\` ${card.name}`)
+            .join("\n");
+
+      const rewardText =
+        season === 1
+          ? `👑 Reward: **${findCardById(UNIQUE_UNLOCKS.bibbles.cardId)?.name || "Bibbles"}**`
+          : `👑 Reward: **${findCardById(UNIQUE_UNLOCKS.appl.cardId)?.name || "Appl"}**`;
+
+      const embed = new EmbedBuilder()
+        .setTitle(`📚 Season ${season} Index`)
+        .setDescription(
+          `Progress: **${ownedCount}/${totalCount}** cards\n` +
+          `Completion: **${percent}%**\n` +
+          `${complete ? "✅ **Complete!**" : "❌ **Incomplete**"}\n\n` +
+          `${rewardText}\n\n` +
+          `**Missing Cards:**\n${missingText}`
+        )
+        .setColor(complete ? 0x57f287 : 0xf5c542)
+        .setFooter({
+          text: missingCards.length > 20
+            ? `Showing first 20 missing cards. Missing total: ${missingCards.length}`
+            : `Missing total: ${missingCards.length}`
+        });
+
+      return interaction.reply({
+        embeds: [embed],
+        flags: 64
+      });
     }
 
 
