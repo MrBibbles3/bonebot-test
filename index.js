@@ -1162,7 +1162,7 @@ function generateShop() {
 
   addRandomUniqueCard(shop, fifthShop);
 
-  if (Math.random() < 0.99) {
+  if (Math.random() < 0.01) {
     const uniqueCard = findCardById("U7");
     if (uniqueCard) {
       shop.push(uniqueCard);
