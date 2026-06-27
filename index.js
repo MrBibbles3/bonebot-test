@@ -900,6 +900,61 @@ async function giveUniqueCard(user, cardId, reason) {
   return true;
 }
 
+async function checkApplUnlock(user, discordUser = null) {
+  const rewardCardId = UNIQUE_UNLOCKS.appl.cardId; // "2U1"
+
+  const season2Cards = Object.values(cards)
+    .flat()
+    .filter(card =>
+      Number(card.season) === 2 &&
+      getCardId(card) !== rewardCardId
+    );
+
+  const ownsAllSeason2 = season2Cards.every(card =>
+    user.inventory.some(invItem =>
+      invItem.itemId === getCardId(card) &&
+      invItem.quantity > 0
+    )
+  );
+
+  if (!ownsAllSeason2) return null;
+
+  const unlocked = await giveUniqueCard(
+    user,
+    UNIQUE_UNLOCKS.appl.cardId,
+    UNIQUE_UNLOCKS.appl.requirement
+  );
+
+  if (!unlocked) return null;
+
+  const card = findCardById(UNIQUE_UNLOCKS.appl.cardId);
+
+  const unlockEmbed = new EmbedBuilder()
+    .setTitle("👑 Unique Card Unlocked! 👑")
+    .setDescription(
+      `You completed the **Season 2 Index**!\n\n` +
+      `You unlocked **${card.name}**!`
+    )
+    .setColor(0xff7ac8)
+    .setImage(getCardImageUrl(card))
+    .addFields({
+      name: "Card ID",
+      value: `\`${getCardId(card)}\``,
+      inline: true
+    });
+
+  if (discordUser) {
+    try {
+      await discordUser.send({ embeds: [unlockEmbed] });
+    } catch (err) {
+      console.log(`Could not DM Appl unlock to ${user.userId}: ${err.message}`);
+    }
+  }
+
+  return unlockEmbed;
+}
+
+
 async function checkKevUnlock(user, discordUser = null) {
   if ((user.bonesSpentTotal || 0) < 50000) return null;
 
@@ -1006,17 +1061,33 @@ async function checkUnlocks(user, discordUser = null) {
   const bibblesUnlock = await checkBibblesUnlock(user, discordUser);
   if (bibblesUnlock) unlockEmbeds.push(bibblesUnlock);
 
+  const applUnlock = await checkApplUnlock(user, discordUser);
+  if (applUnlock) unlockEmbeds.push(applUnlock);
+
   return unlockEmbeds;
 }
 
 function getSeasonIndexData(user, season) {
   const seasonCards = Object.values(cards)
     .flat()
-    .filter(card =>
-      Number(card.season) === Number(season) &&
-      card.rarity !== "UNIQUE"
-    )
-    .sort((a, b) => getCardId(a).localeCompare(getCardId(b), undefined, { numeric: true }));
+    .filter(card => {
+      if (Number(card.season) !== Number(season)) return false;
+
+      // Exclude the Season 1 reward card
+      if (season === 1 && getCardId(card) === UNIQUE_UNLOCKS.bibbles.cardId) {
+        return false;
+      }
+
+      // Exclude the Season 2 reward card
+      if (season === 2 && getCardId(card) === UNIQUE_UNLOCKS.appl.cardId) {
+        return false;
+      }
+
+      return true;
+    })
+    .sort((a, b) =>
+      getCardId(a).localeCompare(getCardId(b), undefined, { numeric: true })
+    );
 
   const ownedCards = seasonCards.filter(card =>
     user.inventory.some(inv =>
