@@ -898,7 +898,7 @@ async function checkKevUnlock(user, discordUser = null) {
       `Requirement: **${UNIQUE_UNLOCKS.kev.requirement}**`
     )
     .setImage(getCardImageUrl(card))
-    .setColor(0xff7ac8);
+    .setColor(0xEFBF04);
     
 
   if (card) {
