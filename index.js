@@ -152,6 +152,7 @@ const commands = [
   new SlashCommandBuilder()
     .setName("index")
     .setDescription("Check your BoneBot card index")
+
     .addIntegerOption(option =>
       option
         .setName("season")
@@ -161,12 +162,13 @@ const commands = [
           { name: "Season 1", value: 1 },
           { name: "Season 2", value: 2 }
         )
-      .addUserOption(option =>
-        option
-          .setName("user")
-          .setDescription("Whose index to view")
-          .setRequired(false)
-      )
+    )
+
+    .addUserOption(option =>
+      option
+        .setName("user")
+        .setDescription("Whose index to view")
+        .setRequired(false)
     ),
 
   new SlashCommandBuilder()
