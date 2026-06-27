@@ -9,6 +9,7 @@ const { createDeck, drawCard, getHandValue } = require("./deck");
 const { makeHandImage } = require("./blackjackImages");
 const User = require("../models/User");
 const games = new Map();
+const { checkUnlocks } = require("../helpers/unlocks");
 
 
 function createMainMenuRow(userId) {
