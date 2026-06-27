@@ -10,8 +10,8 @@ let currentShopMessages = [];
 let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
-const BOT_VERSION = "2.06";
-const IMAGE_COMMIT = "b0cf5bf"; // replace with newest git log --oneline
+const BOT_VERSION = "2.07";
+const IMAGE_COMMIT = "d3606d3"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
   '1470496897721565419'
@@ -977,7 +977,7 @@ async function checkBibblesUnlock(user, discordUser = null) {
       `You completed the **Season 1 Index**!\n\n` +
       `You unlocked **${card.name}**!`
     )
-    .setColor(0xff7ac8)
+    .setColor(0xEFBF04)
     .setImage(getCardImageUrl(card))
     .addFields({
       name: "Card ID",
