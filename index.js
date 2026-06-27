@@ -1064,6 +1064,9 @@ async function checkUnlocks(user, discordUser = null) {
   const applUnlock = await checkApplUnlock(user, discordUser);
   if (applUnlock) unlockEmbeds.push(applUnlock);
 
+  const sinnyUnlock = await checkSinnyUnlock(user, discordUser);
+  if (sinnyUnlock) unlockEmbeds.push(sinnyUnlock);
+
   return unlockEmbeds;
 }
 
@@ -1105,6 +1108,43 @@ function getSeasonIndexData(user, season) {
   };
 }
 
+async function checkSinnyUnlock(user, discordUser = null) {
+  if ((user.blackjack21Count || 0) < 2) return null;
+
+  const unlocked = await giveUniqueCard(
+    user,
+    UNIQUE_UNLOCKS.sinny.cardId,
+    UNIQUE_UNLOCKS.sinny.requirement
+  );
+
+  if (!unlocked) return null;
+
+  const card = findCardById(UNIQUE_UNLOCKS.sinny.cardId);
+
+  const unlockEmbed = new EmbedBuilder()
+    .setTitle("👑 Unique Card Unlocked! 👑")
+    .setDescription(
+      `You unlocked **${card.name}**!\n\n` +
+      `Requirement: **${UNIQUE_UNLOCKS.sinny.requirement}**`
+    )
+    .setColor(0xff7ac8)
+    .setImage(getCardImageUrl(card))
+    .addFields({
+      name: "Card ID",
+      value: `\`${getCardId(card)}\``,
+      inline: true
+    });
+
+  if (discordUser) {
+    try {
+      await discordUser.send({ embeds: [unlockEmbed] });
+    } catch (err) {
+      console.log(`Could not DM Sinny unlock to ${user.userId}: ${err.message}`);
+    }
+  }
+
+  return unlockEmbed;
+}
 
 //Brisbane Time Function
 function getBrisbaneToday() {

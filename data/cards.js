@@ -917,7 +917,7 @@ module.exports = {
         {
           "season": 2,
           "id" : "U1",
-          "name": "Biple",
+          "name": "Bibple",
           "price": 10000,
           "rarity": "UNIQUE"
         },

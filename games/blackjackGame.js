@@ -148,27 +148,40 @@ async function handleBlackjackButton(interaction) {
 
     const user = await User.findOne({ userId: ownerId });
 
-let winnings = 0;
-let result;
+    let winnings = 0;
+    let result;
 
-if (dealerValue > 21 || playerValue > dealerValue) {
-  if (playerValue === 21) {
-    winnings = game.bet * 3;
-    result = `🎉 **21!** You won **${winnings} <:BBones:1518220991938170910>**!`;
-  } else {
-    winnings = game.bet * 2;
-    result = `🎉 You win **${winnings} <:BBones:1518220991938170910>**!`;
-  }
-} else if (playerValue < dealerValue) {
-  winnings = 0;
-  result = `💀 You lose **${game.bet} <:BBones:1518220991938170910>**.`;
-} else {
-  winnings = game.bet;
-  result = `🤝 Push! Your **${game.bet} <:BBones:1518220991938170910>** bet was returned.`;
-}
+    if (dealerValue > 21 || playerValue > dealerValue) {
+      if (playerValue === 21) {
 
-user.bones += winnings;
-await user.save();
+        user.blackjack21Count = (user.blackjack21Count || 0) + 1;
+        const blackjackProgress = Math.min(user.blackjack21Count, 2);
+
+        if (blackjackProgress === 2) {
+          result =
+            `🎉 **21!** You won **${winnings} <:BBones:1518220991938170910>**!\n\n` +
+            `🃏 **Unique Card Progress:** \`10/2\` ✅`;
+        } else {
+          result =
+            `🎉 **21!** You won **${winnings} <:BBones:1518220991938170910>**!\n\n` +
+            `🃏 **Unique Card Progress:** \`${blackjackProgress}/2\``;
+        }
+      } else {
+        winnings = game.bet * 2;
+        result = `🎉 You win **${winnings} <:BBones:1518220991938170910>**!`;
+      }
+    } else if (playerValue < dealerValue) {
+      winnings = 0;
+      result = `💀 You lose **${game.bet} <:BBones:1518220991938170910>**.`;
+    } else {
+      winnings = game.bet;
+      result = `🤝 Push! Your **${game.bet} <:BBones:1518220991938170910>** bet was returned.`;
+    }
+
+    user.bones += winnings;
+    await user.save();
+    
+    const unlockEmbeds = await checkUnlocks(user, interaction.user);
 
     games.delete(ownerId);
 
@@ -185,8 +198,12 @@ await user.save();
       .setThumbnail("attachment://dealer-hand.png")
       .setImage("attachment://player-hand.png")
 
+    const embeds = [embed];
+
+    embeds.push(...unlockEmbeds);
+
     return interaction.update({
-      embeds: [embed],
+      embeds,
       files: [dealerAttachment, playerAttachment],
       components: [createMainMenuRow(ownerId)],
     });
