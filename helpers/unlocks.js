@@ -263,7 +263,7 @@ async function checkApplUnlock(user, discordUser = null) {
 }
 
 async function checkFireUnlock(user, discordUser = null) {
-  if ((user.boneDigPerfectCount || 0) < 10) return null;
+  if ((user.boneDigPerfectCount || 0) < 2) return null;//1111
 
   const unlocked = await giveUniqueCard(
     user,
