@@ -10,8 +10,8 @@ let currentShopMessages = [];
 let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
-const BOT_VERSION = "2.08";
-const IMAGE_COMMIT = "5640438"; // replace with newest git log --oneline
+const BOT_VERSION = "2.09";
+const IMAGE_COMMIT = "53d3b2c"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
   '1470496897721565419'
