@@ -1,5 +1,5 @@
 module.exports = {
-    const UNIQUE_UNLOCKS = {
+    const: UNIQUE_UNLOCKS = {
         bibbles: {
             cardId: "U1",
             requirement: "Complete Season 1 index"
@@ -39,5 +39,5 @@ module.exports = {
             cardId: "2U7",
             requirement: "Buy in Shop"
         }
-    };
+    }
 }
