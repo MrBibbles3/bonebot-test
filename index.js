@@ -10,7 +10,7 @@ let currentShopMessages = [];
 let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
-const BOT_VERSION = "2.03";
+const BOT_VERSION = "2.04";
 const IMAGE_COMMIT = "b0cf5bf"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
@@ -23,7 +23,7 @@ const OFFLINE_IMAGES = false;
 const {DM_REPLIES,RARE_DM_REPLIES} = require("./replies/dmReplies");
 const fs = require("fs");
 const path = require("path");
-
+const UNIQUE_UNLOCKS = require("./data/uniqueUnlocks");
 
 //Game Constants
 const MAX_BIBBLES_TOKENS = 10;
@@ -849,6 +849,75 @@ function getCardImageFileName(card) {
 
 function isCardGif(card) {
   return getCardImageFileName(card).toLowerCase().endsWith(".gif");
+}
+
+
+async function giveUniqueCard(user, cardId, reason) {
+  const card = findCardById(cardId);
+
+  if (!card) {
+    console.log(`Unique card not found: ${cardId}`);
+    return false;
+  }
+
+  const fullCardId = getCardId(card);
+  const existingCard = user.inventory.find(i => i.itemId === fullCardId);
+
+  if (existingCard) {
+    return false;
+  }
+
+  user.inventory.push({
+    itemId: fullCardId,
+    quantity: 1
+  });
+
+  await user.save();
+
+  console.log(`Unlocked ${fullCardId} for ${user.userId}: ${reason}`);
+  return true;
+}
+
+async function checkKevUnlock(user, discordUser = null) {
+  if ((user.bonesSpentTotal || 0) < 50000) return null;
+
+  const unlocked = await giveUniqueCard(
+    user,
+    UNIQUE_UNLOCKS.kev.cardId,
+    UNIQUE_UNLOCKS.kev.requirement
+  );
+
+  if (!unlocked) return null;
+
+  const card = findCardById(UNIQUE_UNLOCKS.kev.cardId);
+
+  const unlockEmbed = new EmbedBuilder()
+    .setTitle("🌸 Unique Card Unlocked!")
+    .setDescription(
+      `You unlocked **${card.name}**!\n\n` +
+      `Requirement: **${UNIQUE_UNLOCKS.kev.requirement}**`
+    )
+    .setColor(0xff7ac8);
+
+  if (card) {
+    unlockEmbed.addFields({
+      name: "Card ID",
+      value: `\`${getCardId(card)}\``,
+      inline: true
+    });
+  }
+
+  if (discordUser) {
+    try {
+      await discordUser.send({
+        embeds: [unlockEmbed]
+      });
+    } catch (err) {
+      console.log(`Could not DM unique unlock to ${user.userId}: ${err.message}`);
+    }
+  }
+
+  return unlockEmbed;
 }
 
 
@@ -3103,6 +3172,8 @@ client.on('interactionCreate', async interaction => {
 
       await user.save();
 
+      const unlockEmbed = await checkKevUnlock(user, interaction.user);
+
       const purchaseEmbed = new EmbedBuilder()
         .setColor(rarities[card.rarity.toUpperCase()].color)
         .setTitle("🛒 Purchase Successful!")
@@ -3147,8 +3218,14 @@ client.on('interactionCreate', async interaction => {
           .setStyle(ButtonStyle.Danger)
       );
 
+      const embeds = [purchaseEmbed];
+
+      if (unlockEmbed) {
+        embeds.push(unlockEmbed);
+      }
+
       return interaction.reply({
-        embeds: [purchaseEmbed],
+        embeds,
         components: [refundRow],
         files,
         flags: 64

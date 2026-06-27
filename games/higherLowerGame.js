@@ -39,7 +39,7 @@ function createMainMenuRow(userId) {
 }
 
 function getStreakTitle(streak) {
-    if (streak >= 20) return "🍀 This is what grass looks like, you need it!\n" + "👑YOU UNLOCKED A SECRET UNIQUE CARD!👑";
+    if (streak >= 20) return "🍀 This is what grass looks like, you need it!\n" + "# 👑YOU UNLOCKED A SECRET UNIQUE CARD!👑";
     if (streak >= 19) return "✨ 2 more....";
     if (streak >= 18) return "🤓 3 more to go!!";
     if (streak >= 17) return "🌸 20 then I'll actually applaud you";
@@ -56,7 +56,7 @@ function getStreakTitle(streak) {
     if (streak >= 6) return "💀 GI-NAMA-NA-NOURUS";
     if (streak >= 5) return "🔥 MEGA STREAK";
     if (streak >= 4) return "✨ BIGGER STREAK";
-    if (streak >= 3) return "🎉 TRIPLE STREAK\n" + "👑YOU UNLOCKED A SECRET UNIQUE CARD!👑";
+    if (streak >= 3) return "🎉 TRIPLE STREAK";
 
   return null;
 }

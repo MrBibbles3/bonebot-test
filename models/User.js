@@ -61,6 +61,16 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    
+    uniqueUnlocks: {
+        kevSpend: { type: Boolean, default: false },
+        season1Index: { type: Boolean, default: false },
+        blackjack21s: { type: Number, default: 0 },
+        boneDigClears: { type: Number, default: 0 },
+        coinFlipPerfects: { type: Number, default: 0 },
+        season2Index: { type: Boolean, default: false },
+        highLowMaxStreaks: { type: Number, default: 0 }
+    },
 
     inventory: [
     {
