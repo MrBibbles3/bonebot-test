@@ -3,7 +3,7 @@ const { EmbedBuilder } = require("discord.js");
 const cards = require("../data/cards");
 const UNIQUE_UNLOCKS = require("../data/uniqueUnlocks");
 
-const IMAGE_COMMIT = "YOUR_COMMIT_HASH";
+const IMAGE_COMMIT = "53d3b2c";
 const BOT_VERSION = "2.0";
 
 function getCardId(card) {
