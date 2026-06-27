@@ -24,10 +24,10 @@ const rarities = {
     color: 0xF59E0B,
     emoji: "💠"
   },
-  FORGOTTEN: {
-    name: "Forgotten",
-    color: 0x4BB6E6,
-    emoji: "❄️"
+  UNIQUE: {
+    name: "Unique",
+    color: 0xEFBF04,
+    emoji: "👑"
   },
   EVENT: {
     name: "Event",
