@@ -2474,22 +2474,42 @@ client.on('interactionCreate', async interaction => {
         if (wins === 3) winnings = Math.floor(bet * 3.5);
 
         user.bones += winnings;
-        user.bonesEarnedTotal += winnings; 
+        user.bonesEarnedTotal += winnings;
+
+        let gameProgress = null;
+
+        if (wins === 3) {
+          user.coinFlipPerfectCount = (user.coinFlipPerfectCount || 0) + 1;
+          gameProgress = Math.min(user.coinFlipPerfectCount, 2);//1111
+        }
+
         await user.save();
+
+        const unlockEmbeds = await checkUnlocks(user, interaction.user);
 
         const profit = winnings - bet;
 
+        let gameOverText =
+          `You got **${wins}/3** correct!\n` +
+          `💰 Winnings: **${winnings} bones**\n` +
+          `📊 Profit: **${profit >= 0 ? "+" : ""}${profit} bones**\n` +
+          `<:BBones:1518220991938170910> New Balance: **${user.bones} bones**<:BBones:1518220991938170910>`;
+
+        if (gameProgress !== null) {
+          gameOverText +=
+            `\n\n🪙 **Unique Card Progress:** \`${gameProgress}/10\`${gameProgress === 2 ? " ✅" : ""}`;//1111
+        }
+
         embed.addFields({
           name: "Game Over",
-          value:
-            `You got **${wins}/3** correct!\n` +
-            `💰 Winnings: **${winnings} bones**\n` +
-            `📊 Profit: **${profit >= 0 ? "+" : ""}${profit} bones**\n` +
-            `<:BBones:1518220991938170910> New Balance: **${user.bones} bones**<:BBones:1518220991938170910>`
+          value: gameOverText
         });
 
+        const embeds = [embed];
+        embeds.push(...unlockEmbeds);
+
         return interaction.update({
-          embeds: [embed],
+          embeds,
           components: [createMainMenuRow(ownerId)]
         });
       }

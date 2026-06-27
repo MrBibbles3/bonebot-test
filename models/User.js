@@ -71,6 +71,11 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+
+    coinFlipPerfectCount: {
+        type: Number,
+        default: 0
+    },
     
     uniqueUnlocks: {
         kevSpend: { type: Boolean, default: false },

@@ -261,7 +261,7 @@ async function handleBoneDigButton(interaction) {
       user.bones += game.winnings;
 
       user.boneDigPerfectCount = (user.boneDigPerfectCount || 0) + 1;
-      const fireProgress = Math.min(user.boneDigPerfectCount, 2);//111
+      const fireProgress = Math.min(user.boneDigPerfectCount, 10);
 
       await user.save();
 
@@ -274,7 +274,7 @@ async function handleBoneDigButton(interaction) {
           `${getBoardText(game, true)}\n` +
           `💰 Winnings: **${game.winnings} <:BBones:1518220991938170910>**\n` +
           `<:BBones:1518220991938170910> New Balance: **${user.bones} <:BBones:1518220991938170910>**\n\n` +
-          `🔥 **Unique Card Progress:** \`${fireProgress}/2\`${fireProgress === 2 ? " ✅" : ""}`//1111
+          `🔥 **Unique Card Progress:** \`${fireProgress}/10\`${fireProgress === 10 ? " ✅" : ""}`
         )
         .setColor(0x57f287);
 
