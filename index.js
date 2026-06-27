@@ -1645,6 +1645,79 @@ client.on('messageCreate', async (message) => {
   // ========================
   // GIVE CARD COMMAND
   // ========================
+  if (message.content.toLowerCase().startsWith("!giveall")) {
+    if (!message.member.permissions.has("Administrator")) {
+      return message.reply("You don't have permission.");
+    }
+
+    const args = message.content.split(/\s+/);
+
+    const target = message.mentions.users.first();
+    const rarity = args[2]?.toUpperCase();
+    const season = Number(args[3]);
+
+    if (!target || !rarity || !season) {
+      return message.reply("Usage: `!giveall @user RARITY SEASON`");
+    }
+
+    if (!cards[rarity]) {
+      return message.reply(`Invalid rarity: \`${rarity}\``);
+    }
+
+    let user = await User.findOne({ userId: target.id });
+
+    if (!user) {
+      user = new User({
+        userId: target.id,
+        bones: 0,
+        inventory: []
+      });
+    }
+
+    let added = 0;
+    let alreadyOwned = 0;
+
+    const cardsToGive = cards[rarity].filter(card =>
+      Number(card.season) === season
+    );
+
+    for (const card of cardsToGive) {
+      const fullCardId = getCardId(card);
+
+      const existingCard = user.inventory.find(i =>
+        i.itemId === fullCardId
+      );
+
+      if (existingCard) {
+        alreadyOwned++;
+        continue;
+      }
+
+      user.inventory.push({
+        itemId: fullCardId,
+        quantity: 1
+      });
+
+      added++;
+    }
+
+    await user.save();
+
+    const unlockEmbeds = await checkUnlocks(user, target);
+
+    return message.reply({
+      content:
+        `✅ Gave **${added}** ${rarity} Season ${season} cards to ${target}.\n` +
+        `Already owned: **${alreadyOwned}**`,
+      embeds: unlockEmbeds
+    });
+  }
+
+
+
+  // ========================
+  // GIVE CARD COMMAND
+  // ========================
   if (message.content.startsWith('!givecard')) {
 
     if (!message.member.permissions.has('Administrator')) {

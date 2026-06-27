@@ -186,7 +186,7 @@ async function checkSinnyUnlock(user, discordUser = null) {
       `You unlocked **${card.name}**!\n\n` +
       `Requirement: **${UNIQUE_UNLOCKS.sinny.requirement}**`
     )
-    .setColor(0xff7ac8)
+    .setColor(0xEFBF04)
     .setImage(getCardImageUrl(card))
     .addFields({
       name: "Card ID",
@@ -240,7 +240,7 @@ async function checkApplUnlock(user, discordUser = null) {
       `You completed the **Season 2 Index**!\n\n` +
       `You unlocked **${card.name}**!`
     )
-    .setColor(0xff7ac8)
+    .setColor(0xEFBF04)
     .setImage(getCardImageUrl(card))
     .addFields({
       name: "Card ID",
