@@ -689,7 +689,7 @@ module.exports = {
       "season": 1,
       "id" : "N1",
       "name": "Diamond Apple",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -697,7 +697,7 @@ module.exports = {
       "season": 1,
       "id" : "N2",
       "name": "Gamebest",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -705,7 +705,7 @@ module.exports = {
       "season": 1,
       "id" : "N3",
       "name": "Suki",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -713,7 +713,7 @@ module.exports = {
       "season": 1,
       "id" : "N4",
       "name": "Banjo & Kazooie",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -721,7 +721,7 @@ module.exports = {
       "season": 1,
       "id" : "N5",
       "name": "Hoopa",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -729,7 +729,7 @@ module.exports = {
       "season": 1,
       "id" : "N6",
       "name": "Trigger Happy",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -737,7 +737,7 @@ module.exports = {
       "season": 1,
       "id" : "N7",
       "name": "Legendary Bird Man",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -745,7 +745,7 @@ module.exports = {
       "season": 1,
       "id" : "N8",
       "name": "SARKK SLOBBER FOFCE",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -753,7 +753,7 @@ module.exports = {
       "season": 1,
       "id" : "N9",
       "name": "Burger Special",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -761,7 +761,7 @@ module.exports = {
       "season": 1,
       "id" : "N10",
       "name": "$$$$$$$",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -769,7 +769,7 @@ module.exports = {
       "season": 1,
       "id" : "N11",
       "name": "Ominous Dev",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -777,7 +777,7 @@ module.exports = {
       "season": 1,
       "id" : "N12",
       "name": "Dev Feddy",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     , 
@@ -785,7 +785,7 @@ module.exports = {
       "season": 1,
       "id" : "N13",
       "name": "Crash",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -793,7 +793,7 @@ module.exports = {
       "season": 1,
       "id" : "N14",
       "name": "RangaWrath",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     }
     ,
@@ -801,7 +801,7 @@ module.exports = {
       "season": 1,
       "id" : "N15",
       "name": "Shiny Coffee Glazer",
-      "price": 3000,
+      "price": 2500,
       "rarity": "NIGHTMARE"
     },
         {

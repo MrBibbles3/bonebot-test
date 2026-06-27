@@ -10,7 +10,7 @@ let currentShopMessages = [];
 let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
-const BOT_VERSION = "2.04";
+const BOT_VERSION = "2.05";
 const IMAGE_COMMIT = "b0cf5bf"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
@@ -922,6 +922,70 @@ async function checkKevUnlock(user, discordUser = null) {
   return unlockEmbed;
 }
 
+async function checkBibblesUnlock(user, discordUser = null) {
+  const season1Cards = Object.values(cards)
+    .flat()
+    .filter(card =>
+      Number(card.season) === 1 &&
+      card.rarity !== "UNIQUE"
+    );
+
+  const ownsAllSeason1 = season1Cards.every(card =>
+    user.inventory.some(invItem =>
+      invItem.itemId === getCardId(card) &&
+      invItem.quantity > 0
+    )
+  );
+
+  if (!ownsAllSeason1) return null;
+
+  const unlocked = await giveUniqueCard(
+    user,
+    UNIQUE_UNLOCKS.bibbles.cardId,
+    UNIQUE_UNLOCKS.bibbles.requirement
+  );
+
+  if (!unlocked) return null;
+
+  const card = findCardById(UNIQUE_UNLOCKS.bibbles.cardId);
+
+  const unlockEmbed = new EmbedBuilder()
+    .setTitle("👑 Unique Card Unlocked! 👑")
+    .setDescription(
+      `You completed the **Season 1 Index**!\n\n` +
+      `You unlocked **${card.name}**!`
+    )
+    .setColor(0xff7ac8)
+    .setImage(getCardImageUrl(card))
+    .addFields({
+      name: "Card ID",
+      value: `\`${getCardId(card)}\``,
+      inline: true
+    });
+
+  if (discordUser) {
+    try {
+      await discordUser.send({ embeds: [unlockEmbed] });
+    } catch (err) {
+      console.log(`Could not DM Bibbles unlock to ${user.userId}: ${err.message}`);
+    }
+  }
+
+  return unlockEmbed;
+}
+
+
+async function checkUnlocks(user, discordUser = null) {
+  const unlockEmbeds = [];
+
+  const kevUnlock = await checkKevUnlock(user, discordUser);
+  if (kevUnlock) unlockEmbeds.push(kevUnlock);
+
+  const bibblesUnlock = await checkBibblesUnlock(user, discordUser);
+  if (bibblesUnlock) unlockEmbeds.push(bibblesUnlock);
+
+  return unlockEmbeds;
+}
 
 //Brisbane Time Function
 function getBrisbaneToday() {
@@ -3132,7 +3196,6 @@ client.on('interactionCreate', async interaction => {
     // =========================================
     if (interaction.customId.startsWith('buy_')) {
       const parts = interaction.customId.split('_');
-      console.log("BUY HANDLER CLICKED:", interaction.customId);
 
       const cardId = parts[1];
       const quantity = Number(parts[2] || 1);
@@ -3175,7 +3238,7 @@ client.on('interactionCreate', async interaction => {
 
       await user.save();
 
-      const unlockEmbed = await checkKevUnlock(user, interaction.user);
+      const unlockEmbeds = await checkUnlocks(user, interaction.user);
 
       const purchaseEmbed = new EmbedBuilder()
         .setColor(rarities[card.rarity.toUpperCase()].color)
@@ -3196,22 +3259,10 @@ client.on('interactionCreate', async interaction => {
           { name: fileName }
         );
 
-        if (isCardGif(card)) {
-          purchaseEmbed.setImage(`attachment://${fileName}`);
-        } else {
-          purchaseEmbed.setImage(`attachment://${fileName}`);
-        }
-
+        purchaseEmbed.setImage(`attachment://${fileName}`);
         files.push(attachment);
-
       } else {
-
-        if (isCardGif(card)) {
-          purchaseEmbed.setImage(getCardImageUrl(card));
-        } else {
-          purchaseEmbed.setImage(getCardImageUrl(card));
-        }
-
+        purchaseEmbed.setImage(getCardImageUrl(card));
       }
 
       const refundRow = new ActionRowBuilder().addComponents(
@@ -3223,9 +3274,7 @@ client.on('interactionCreate', async interaction => {
 
       const embeds = [purchaseEmbed];
 
-      if (unlockEmbed) {
-        embeds.push(unlockEmbed);
-      }
+      embeds.push(...unlockEmbeds);
 
       return interaction.reply({
         embeds,
