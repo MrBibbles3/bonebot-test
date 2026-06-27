@@ -3105,9 +3105,17 @@ client.on('interactionCreate', async interaction => {
         });
       }
 
-      const ownedCards = user.inventory.filter(invItem =>
-        cards[rarity]?.some(c => getCardId(c) === invItem.itemId)
-      );
+      const specialRarities = ["UNIQUE", "EVENT"];
+
+      const ownedCards = user.inventory.filter(invItem => {
+        if (rarity === "SPECIAL") {
+          return specialRarities.some(specialRarity =>
+            cards[specialRarity]?.some(c => getCardId(c) === invItem.itemId)
+          );
+        }
+
+        return cards[rarity]?.some(c => getCardId(c) === invItem.itemId);
+      });
 
       ownedCards.sort(sortInventoryCards);
 
@@ -3131,7 +3139,8 @@ client.on('interactionCreate', async interaction => {
       }
 
       const cardId = ownedCards[newIndex].itemId;
-      const cardData = cards[rarity]?.find(c => getCardId(c) === cardId);
+      const allCards = Object.values(cards).flat();
+      const cardData = allCards.find(c => getCardId(c) === cardId);
 
       if (!cardData) {
         return interaction.reply({
