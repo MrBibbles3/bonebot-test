@@ -892,12 +892,13 @@ async function checkKevUnlock(user, discordUser = null) {
   const card = findCardById(UNIQUE_UNLOCKS.kev.cardId);
 
   const unlockEmbed = new EmbedBuilder()
-    .setTitle("🌸 Unique Card Unlocked!")
+    .setTitle("👑 Unique Card Unlocked! 👑")
     .setDescription(
       `You unlocked **${card.name}**!\n\n` +
       `Requirement: **${UNIQUE_UNLOCKS.kev.requirement}**`
     )
     .setColor(0xff7ac8);
+    .setImage(getCardImageUrl(card));
 
   if (card) {
     unlockEmbed.addFields({
