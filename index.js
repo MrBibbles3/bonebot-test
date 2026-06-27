@@ -161,6 +161,12 @@ const commands = [
           { name: "Season 1", value: 1 },
           { name: "Season 2", value: 2 }
         )
+      .addUserOption(option =>
+        option
+          .setName("user")
+          .setDescription("Whose index to view")
+          .setRequired(false)
+      )
     ),
 
   new SlashCommandBuilder()
@@ -2624,7 +2630,9 @@ client.on('interactionCreate', async interaction => {
     if (interaction.commandName === "index") {
       const season = interaction.options.getInteger("season");
 
-      const user = await getOrCreateUser(interaction.user.id);
+      const targetUser = interaction.options.getUser("user") || interaction.user;
+
+      const user = await getOrCreateUser(targetUser.id);
 
       const {
         seasonCards,
@@ -2657,7 +2665,7 @@ client.on('interactionCreate', async interaction => {
           : `👑 Reward: **${findCardById(UNIQUE_UNLOCKS.appl.cardId)?.name || "Appl"}**`;
 
       const embed = new EmbedBuilder()
-        .setTitle(`📚 Season ${season} Index`)
+        .setTitle(`📚 ${targetUser.username}'s Season ${season} Index`)
         .setDescription(
           `Progress: **${ownedCount}/${totalCount}** cards\n` +
           `Completion: **${percent}%**\n` +
