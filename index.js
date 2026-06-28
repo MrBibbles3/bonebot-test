@@ -387,13 +387,40 @@ function buildHelpEmbed(section = "main") {
     .setTitle("📖 BoneBot Help");
 
   if (section === "main") {
-    embed.setDescription(
-      `Choose a help section below:\n\n` +
-      `**1.** How to get Bones\n` +
-      `**2.** How to buy Cards\n` +
-      `**3.** Commands List\n` +
-      `**4.** Why??`
-    );
+    embed..setDescription(
+      `# 👋 Welcome to BoneBot!\n\n` +
+
+      `**@BoneBot** is a Discord bot programmed by **MrBibbles** himself!\n\n` +
+
+      `BoneBot provides a shop where you can purchase cards for your collection! These cards feature **MrBibbles' Server characters (real users)** and **inside jokes** that have happened throughout the server's lifespan.\n\n` +
+
+      `Purchase cards in <#1471356398989480103> using **BONES** <:BBones:1518220991938170910>, which you earn by:\n` +
+      `• 💬 Chatting\n` +
+      `• 📅 Claiming your Daily Reward\n` +
+      `• 🎮 Playing Games\n\n` +
+
+      `━━━━━━━━━━━━━━━━━━\n\n` +
+
+      `### 🎴 Why collect cards?\n\n` +
+
+      `Collecting cards will reward you with **badges** and **roles** in a future update. For now, they're a fun collection game to enjoy with other members of the server!\n\n` +
+
+      `There's even more to do:\n` +
+      `• 👑 Unlock **Achievements**\n` +
+      `• 🎲 Play **Gambling Games**\n` +
+      `• 🏆 Compete on the **Leaderboards**\n\n` +
+
+      `*More complicated games and features will be added in future updates!*\n\n` +
+
+      `━━━━━━━━━━━━━━━━━━\n\n` +
+
+      `## 📖 Click a button below to learn more!\n\n` +
+
+      `**1️⃣** • How to get Bones\n\n` +
+      `**2️⃣** • How to buy Cards\n\n` +
+      `**3️⃣** • Commands List\n\n` +
+      `**4️⃣** • Why??`
+    )
   }
 
   if (section === "bones") {
