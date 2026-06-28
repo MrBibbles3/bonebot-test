@@ -390,7 +390,7 @@ function buildHelpEmbed(section = "main") {
     embed.setDescription(
       `# 👋 Welcome to BoneBot!\n\n` +
 
-      `**@BoneBot** is a Discord bot programmed by **MrBibbles** himself!\n\n` +
+      `**@BoneBot** is a Discord bot programmed by **MrBibbles** himself! (aided by **KevTsuboi and testers)**\n\n` +
 
       `BoneBot provides a shop where you can purchase cards for your collection! These cards feature **MrBibbles' Server characters (real users)** and **inside jokes** that have happened throughout the server's lifespan.\n\n` +
 
@@ -426,25 +426,119 @@ function buildHelpEmbed(section = "main") {
   if (section === "bones") {
     embed
       .setTitle("1️⃣ How to get Bones")
-      .setDescription("text here");
+      .setDescription(
+        `**Bones** <:BBones:1518220991938170910> are the main currency BoneBot runs on!\n\n` +
+
+        `You can earn Bones by:\n` +
+        `• 💬 Sending messages anywhere in the server *(30 second cooldown)*\n` +
+        `• 📅 Using **/daily** *(includes an infinite streak with bonus rewards up to 30!)*\n` +
+        `• 🎮 Playing games with **/games**\n\n` +
+
+        `━━━━━━━━━━━━━━━━━━\n\n` +
+
+        `### 💰 Useful Commands\n\n` +
+
+        `**/balance** - Check your Bones balance *(or someone else's!)*\n\n` +
+        `**/leaderboard** - View the Bones leaderboard\n\n` +
+
+        `Once you've earned enough Bones, spend them in:\n` +
+        `• 🛒 <#1471356398989480103> *(Bone Shop)*\n` +
+        `• 🎲 **/games** *(Gambling Games)*\n\n` +
+
+        `*Spend wisely... or don't. Gamba is always an option.*`
+      );
   }
 
   if (section === "cards") {
     embed
       .setTitle("2️⃣ How to buy Cards")
-      .setDescription("text here");
+      .setDescription(
+        `Purchase **Bone Cards** in the Bone Shop:\n` +
+        `🛒 <#1471356398989480103>\n\n` +
+
+        `The Bone Shop refreshes **every hour**, offering random cards from multiple rarities!\n\n` +
+
+        `Current chances include:\n` +
+        `• 🌙 Nightmare Cards - **50%**\n` +
+        `• 👑 Apex Cards - **10%**\n` +
+        `• ❓ ...and there may be one more card that can appear... *shhh* 😉\n\n` +
+
+        `━━━━━━━━━━━━━━━━━━\n\n` +
+
+        `### 🎴 Building Your Collection\n\n` +
+
+        `Each shop card lets you:\n` +
+        `• ✅ Check if you already own it\n` +
+        `• 🛒 Purchase **1** or **5** copies\n\n` +
+
+        `Use these commands to manage your collection:\n\n` +
+
+        `**/index** - View every card in the game *(yours or another player's!)*\n\n` +
+        `**/inventory** - Browse your card collection *(or someone else's!)*\n\n` +
+
+        `🏆 Completing the **Season 1** or **Season 2** Index unlocks special rewards!\n\n` +
+        `Track your progress anytime using **/achievements**.`
+      );
   }
 
   if (section === "commands") {
     embed
       .setTitle("3️⃣ Commands List")
-      .setDescription("text here");
+      .setDescription(
+        `BoneBot currently has **10 commands** available!\n\n` +
+
+        `🏆 **/achievements**\n` +
+        `View every achievement and your progress *(or another player's!)*\n\n` +
+
+        `💰 **/balance**\n` +
+        `Check your Bones balance *(or another player's!)*\n\n` +
+
+        `📖 **/commands** or **/help**\n` +
+        `Open this help menu.\n\n` +
+
+        `📅 **/daily**\n` +
+        `Claim your daily Bones! Your streak is **infinite**, but bonus rewards stop increasing after **30**.\n\n` +
+
+        `🎲 **/games**\n` +
+        `Play gambling games using your Bones!\n\n` +
+
+        `🎴 **/index**\n` +
+        `View your card index progress *(or another player's!)*\n\n` +
+
+        `📦 **/inventory**\n` +
+        `Browse your card collection *(or another player's!)*\n\n` +
+
+        `🏅 **/leaderboard**\n` +
+        `View multiple leaderboards.\n\n` +
+
+        `🔔 **/pings**\n` +
+        `Set DM notifications for cards you're chasing, and enable Daily Pings!\n\n` +
+
+        `*You must have DMs from server members enabled for this feature to work.*`
+      );
   }
 
   if (section === "why") {
     embed
       .setTitle("4️⃣ Why??")
-      .setDescription("text here");
+      .setDescription(
+        `# 🎲 BECAUSE IT IS FUN! AND GAMBA!\n\n` +
+
+        `I *(MrBibbles)* have spent months working on this project on and off to prove to myself that I could!\n\n` +
+
+        `I've always wanted a real-life card collecting game, and this is **my game**. ❤️\n\n` +
+
+        `More features will continue to be added whenever I have spare time, including more advanced web-based games.\n\n` +
+
+        `For now, I hope you enjoy the games I've made and all of the amazing artwork submitted by members of the server!\n\n` +
+
+        `🎨 **Credits:**\n` +
+        `<#1474982495123411149>\n\n` +
+
+        `If you've created any artwork *(or even relevant memes!)* that you'd like to be considered, feel free to submit them here:\n\n` +
+
+        `🖼️ <#1481167502372245505>`
+      );
   }
 
   return embed;
