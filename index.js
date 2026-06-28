@@ -10,8 +10,8 @@ let currentShopMessages = [];
 let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
-const BOT_VERSION = "2.10";
-const IMAGE_COMMIT = "53d3b2c"; // replace with newest git log --oneline
+const BOT_VERSION = "2.11";
+const IMAGE_COMMIT = "367d596"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
   '1470496897721565419'
@@ -53,7 +53,7 @@ const client = new Client({
     Partials.Channel
   ]
 });
-
+HEWWO MY NAME IS JEFF!!!;;;;!!!()(){}{}
 async function clearShopChannel(channel) {
   try {
     const messages = await channel.messages.fetch({ limit: 100 });
