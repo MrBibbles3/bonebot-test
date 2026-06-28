@@ -955,7 +955,7 @@ async function notifyPingUsers(shopItems) {
         const pingEmbed = new EmbedBuilder()
           .setTitle("📡 Ping Alert!")
           .setDescription(
-            `Your tracked card **${card.name}** is now available in the Bone Emporium! <:BBones:1518220991938170910>`
+            `Your tracked card **${card.name}** is now available in the Bone Emporium! <:BBones:1518220991938170910> *USE /pings to REMOVE DMs if wanted*`
           )
           .setColor(rarities[card.rarity].color)
           .addFields(
