@@ -420,7 +420,7 @@ function buildHelpEmbed(section = "main") {
       `**2️⃣** • How to buy Cards\n\n` +
       `**3️⃣** • Commands List\n\n` +
       `**4️⃣** • Why??`
-    )
+    );
   }
 
   if (section === "bones") {
