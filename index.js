@@ -153,6 +153,14 @@ const commands = [
   ),
 
   new SlashCommandBuilder()
+    .setName("help")
+    .setDescription("Learn how BoneBot works"),
+
+  new SlashCommandBuilder()
+    .setName("commands")
+    .setDescription("View BoneBot help and commands"),
+
+  new SlashCommandBuilder()
   .setName("games")
   .setDescription("Play Bones Games using tokens!"),
 
@@ -371,6 +379,74 @@ function sortInventoryCards(a, b) {
 
   return aData.number - bData.number;
 }
+
+
+function buildHelpEmbed(section = "main") {
+  const embed = new EmbedBuilder()
+    .setColor(0xEFBF04)
+    .setTitle("📖 BoneBot Help");
+
+  if (section === "main") {
+    embed.setDescription(
+      `Choose a help section below:\n\n` +
+      `**1.** How to get Bones\n` +
+      `**2.** How to buy Cards\n` +
+      `**3.** Commands List\n` +
+      `**4.** Why??`
+    );
+  }
+
+  if (section === "bones") {
+    embed
+      .setTitle("1️⃣ How to get Bones")
+      .setDescription("text here");
+  }
+
+  if (section === "cards") {
+    embed
+      .setTitle("2️⃣ How to buy Cards")
+      .setDescription("text here");
+  }
+
+  if (section === "commands") {
+    embed
+      .setTitle("3️⃣ Commands List")
+      .setDescription("text here");
+  }
+
+  if (section === "why") {
+    embed
+      .setTitle("4️⃣ Why??")
+      .setDescription("text here");
+  }
+
+  return embed;
+}
+
+function buildHelpButtons(userId) {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId(`help_bones_${userId}`)
+      .setLabel("1")
+      .setStyle(ButtonStyle.Primary),
+
+    new ButtonBuilder()
+      .setCustomId(`help_cards_${userId}`)
+      .setLabel("2")
+      .setStyle(ButtonStyle.Primary),
+
+    new ButtonBuilder()
+      .setCustomId(`help_commands_${userId}`)
+      .setLabel("3")
+      .setStyle(ButtonStyle.Primary),
+
+    new ButtonBuilder()
+      .setCustomId(`help_why_${userId}`)
+      .setLabel("4")
+      .setStyle(ButtonStyle.Primary)
+  );
+}
+
 
 async function applyDailyTokenGrant(user) {
   const today = getBrisbaneToday();
@@ -1989,6 +2065,27 @@ client.on('interactionCreate', async interaction => {
   }
 
 
+
+
+    if (interaction.isButton() && interaction.customId.startsWith("help_")) {
+      const parts = interaction.customId.split("_");
+
+      const section = parts[1];
+      const ownerId = parts[2];
+
+      if (interaction.user.id !== ownerId) {
+        return interaction.reply({
+          content: "This help menu is not yours.",
+          flags: 64
+        });
+      }
+
+      return interaction.update({
+        embeds: [buildHelpEmbed(section)],
+        components: [buildHelpButtons(ownerId)]
+      });
+    }
+    
     // ========================
     // BLACKJACK BET
     // ========================
@@ -2601,6 +2698,17 @@ client.on('interactionCreate', async interaction => {
     if (interaction.commandName === "games") {
       const user = await getOrCreateUser(interaction.user.id);
       return showGamesMenu(interaction, user);
+    }
+
+    if (
+      interaction.commandName === "help" ||
+      interaction.commandName === "commands"
+    ) {
+      return interaction.reply({
+        embeds: [buildHelpEmbed("main")],
+        components: [buildHelpButtons(interaction.user.id)],
+        flags: 64
+      });
     }
 
     if (interaction.commandName === "index") {
