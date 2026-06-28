@@ -10,7 +10,7 @@ let currentShopMessages = [];
 let shopEndTime = null;
 let countdownInterval = null;
 let shopHeaderMessage = null;
-const BOT_VERSION = "2.09";
+const BOT_VERSION = "2.10";
 const IMAGE_COMMIT = "53d3b2c"; // replace with newest git log --oneline
 const ALLOWED_CHANNELS = [
   '1471357861526241350',
@@ -427,23 +427,29 @@ function buildHelpButtons(userId) {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`help_bones_${userId}`)
-      .setLabel("1")
+      .setLabel("1️⃣")
       .setStyle(ButtonStyle.Primary),
 
     new ButtonBuilder()
       .setCustomId(`help_cards_${userId}`)
-      .setLabel("2")
-      .setStyle(ButtonStyle.Primary),
+      .setLabel("2️⃣")
+      .setStyle(ButtonStyle.Success),
 
     new ButtonBuilder()
       .setCustomId(`help_commands_${userId}`)
-      .setLabel("3")
-      .setStyle(ButtonStyle.Primary),
+      .setLabel("3️⃣")
+      .setStyle(ButtonStyle.Secondary),
 
     new ButtonBuilder()
       .setCustomId(`help_why_${userId}`)
-      .setLabel("4")
-      .setStyle(ButtonStyle.Primary)
+      .setLabel("4️⃣")
+      .setStyle(ButtonStyle.Danger),
+
+    new ButtonBuilder()
+      .setCustomId(`help_main_${userId}`)
+      .setLabel("Menu")
+      .setEmoji("🏠")
+      .setStyle(ButtonStyle.Success)
   );
 }
 
@@ -1031,7 +1037,7 @@ async function notifyPingUsers(shopItems) {
         const pingEmbed = new EmbedBuilder()
           .setTitle("📡 Ping Alert!")
           .setDescription(
-            `Your tracked card **${card.name}** is now available in the Bone Emporium! <:BBones:1518220991938170910> *USE /pings to REMOVE DMs if wanted*`
+            `Your tracked card **${card.name}** is now available in the Bone Emporium! <:BBones:1518220991938170910> ***USE /pings to REMOVE DMs if wanted***`
           )
           .setColor(rarities[card.rarity].color)
           .addFields(
@@ -2085,7 +2091,7 @@ client.on('interactionCreate', async interaction => {
         components: [buildHelpButtons(ownerId)]
       });
     }
-    
+
     // ========================
     // BLACKJACK BET
     // ========================
