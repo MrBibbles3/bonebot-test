@@ -2267,7 +2267,7 @@ client.on('interactionCreate', async interaction => {
   }
 
 
-  if (interaction.customId.startsWith("daily_ping_toggle_")) {
+  if (interaction.isButton() && interaction.customId.startsWith("daily_ping_toggle_")) {
     const parts = interaction.customId.split("_");
     const viewerId = parts[3];
 
