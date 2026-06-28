@@ -72,6 +72,8 @@ async function clearShopChannel(channel) {
 client.once('clientReady', async () => {
   console.log(`Logged in as ${client.user.tag}`);
 
+  setInterval(sendDailyResetPings, 60 * 1000);
+
   try {
     const shopChannel = await client.channels.fetch(SHOP_CHANNEL_ID);
 
@@ -323,10 +325,18 @@ function buildPingsMessage(user, viewerId) {
       .setStyle(ButtonStyle.Danger)
   );
 
+  const dailyPingRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId(`daily_ping_toggle_${viewerId}`)
+      .setLabel(user.dailyPingEnabled ? "Daily Ping: ON" : "Daily Ping: OFF")
+      .setEmoji(user.dailyPingEnabled ? "🔔" : "🔕")
+      .setStyle(user.dailyPingEnabled ? ButtonStyle.Success : ButtonStyle.Secondary)
+  );
+
   return {
     embeds: pingEmbeds,
     files,
-    components: [setRow, clearRow],
+    components: [setRow, clearRow, dailyPingRow],
     flags: 64
   };
 }
@@ -460,7 +470,7 @@ function buildHelpEmbed(section = "main") {
 
         `Current chances include:\n` +
         `• 🌙 Nightmare Cards - **50%**\n` +
-        `• 👑 Apex Cards - **10%**\n` +
+        `• 💠 Apex Cards - **10%**\n` +
         `• ❓ ...and there may be one more card that can appear... *shhh* 😉\n\n` +
 
         `━━━━━━━━━━━━━━━━━━\n\n` +
@@ -1124,6 +1134,53 @@ function getShopSeasonsForToday() {
   return [1, 2];
 }
 
+let lastDailyPingDate = null;
+
+function getDailyPingResetDate() {
+  const now = new Date();
+
+  const brisbaneNow = new Date(
+    now.toLocaleString("en-US", { timeZone: "Australia/Brisbane" })
+  );
+
+  const resetTime = new Date(brisbaneNow);
+  resetTime.setHours(24, 0, 0, 0);
+  resetTime.setHours(resetTime.getHours() - 10);
+
+  return resetTime;
+}
+
+async function sendDailyResetPings(force = false) {
+  const today = getBrisbaneToday();
+
+  if (!force && lastDailyPingDate === today) return 0;
+  const now = new Date();
+  const resetTime = getDailyPingResetDate();
+
+  if (!force && now < resetTime) return 0;
+
+  lastDailyPingDate = today;
+
+  const users = await User.find({
+    dailyPingEnabled: true
+  });
+
+  for (const userData of users) {
+    try {
+      const discordUser = await client.users.fetch(userData.userId);
+
+      await discordUser.send(
+        `<:BBones:1518220991938170910> **Daily Reset!**\n\n` +
+        `Your **/daily** reward is ready to claim!`
+      );
+    } catch (err) {
+      console.log(`Could not send daily ping to ${userData.userId}: ${err.message}`);
+    }
+  }
+
+  console.log(`Daily reset pings sent to ${users.length} users.`);
+}
+
 //Brisbane Time Function
 function getBrisbaneToday() {
   return new Date (
@@ -1515,8 +1572,26 @@ client.on('messageCreate', async (message) => {
 
   
   // ========================
+  // TEST PING DAILY
+  // ========================
+  if (message.content.toLowerCase() === "!pingdaily") {
+    if (!message.member.permissions.has("Administrator")) {
+      return message.reply("You don't have permission.");
+    }
+
+    const sent = await sendDailyResetPings(true);
+
+    return message.reply(
+      `✅ Daily ping sent to **${sent}** user${sent === 1 ? "" : "s"}.`
+    );
+  }
+
+
+
+  // ========================
   // GIVE TOKENS
   // ========================
+
   if (message.content.startsWith("!givetokens")) {
     if (!message.member.permissions.has("Administrator")) return;
 
@@ -2192,26 +2267,47 @@ client.on('interactionCreate', async interaction => {
   }
 
 
+  if (interaction.customId.startsWith("daily_ping_toggle_")) {
+    const parts = interaction.customId.split("_");
+    const viewerId = parts[3];
 
-
-    if (interaction.isButton() && interaction.customId.startsWith("help_")) {
-      const parts = interaction.customId.split("_");
-
-      const section = parts[1];
-      const ownerId = parts[2];
-
-      if (interaction.user.id !== ownerId) {
-        return interaction.reply({
-          content: "This help menu is not yours.",
-          flags: 64
-        });
-      }
-
-      return interaction.update({
-        embeds: [buildHelpEmbed(section)],
-        components: [buildHelpButtons(ownerId)]
+    if (interaction.user.id !== viewerId) {
+      return interaction.reply({
+        content: "This is not your ping menu.",
+        flags: 64
       });
     }
+
+    const user = await getOrCreateUser(interaction.user.id);
+
+    user.dailyPingEnabled = !user.dailyPingEnabled;
+    await user.save();
+
+    const pingsMessage = buildPingsMessage(user, interaction.user.id);
+
+    return interaction.update(pingsMessage);
+  }
+
+
+
+  if (interaction.isButton() && interaction.customId.startsWith("help_")) {
+    const parts = interaction.customId.split("_");
+
+    const section = parts[1];
+    const ownerId = parts[2];
+
+    if (interaction.user.id !== ownerId) {
+      return interaction.reply({
+        content: "This help menu is not yours.",
+        flags: 64
+      });
+    }
+
+    return interaction.update({
+      embeds: [buildHelpEmbed(section)],
+      components: [buildHelpButtons(ownerId)]
+    });
+  }
 
     // ========================
     // BLACKJACK BET

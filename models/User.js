@@ -57,6 +57,11 @@ const userSchema = new mongoose.Schema({
         default: 0
     },
 
+    dailyPingEnabled: {
+        type: Boolean,
+        default: false
+    },
+
     bonesEarnedTotal: {
         type: Number,
         default: 0
