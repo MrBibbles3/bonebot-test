@@ -1171,7 +1171,7 @@ async function sendDailyResetPings(force = false) {
 
       await discordUser.send(
         `<:BBones:1518220991938170910> **Daily Reset!**\n\n` +
-        `Your **/daily** reward is ready to claim!`
+        `Your **/daily** reward is ready to claim here https://discord.com/channels/1393315074235699200/1471356531009130701 !`
       );
     } catch (err) {
       console.log(`Could not send daily ping to ${userData.userId}: ${err.message}`);
