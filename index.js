@@ -387,7 +387,7 @@ function buildHelpEmbed(section = "main") {
     .setTitle("📖 BoneBot Help");
 
   if (section === "main") {
-    embed..setDescription(
+    embed.setDescription(
       `# 👋 Welcome to BoneBot!\n\n` +
 
       `**@BoneBot** is a Discord bot programmed by **MrBibbles** himself!\n\n` +
